@@ -16,6 +16,10 @@ type Configuration struct {
 	AutoPass bool `json:"auto_pass"`
 	// 会话超时时间
 	SessionTimeout time.Duration `json:"session_timeout"`
+	// 监听特定群
+	GroupNames string `json:"group_names"`
+	// 监听特定人员
+	UserNames string `json:"user_names"`
 }
 
 var config *Configuration
@@ -28,7 +32,7 @@ func LoadConfig() *Configuration {
 		config = &Configuration{
 			SessionTimeout: 1,
 		}
-		f, err := os.Open("config.json")
+		f, err := os.Open("config.dev.json")
 		if err != nil {
 			log.Fatalf("open config err: %v", err)
 			return
@@ -45,6 +49,8 @@ func LoadConfig() *Configuration {
 		ApiKey := os.Getenv("ApiKey")
 		AutoPass := os.Getenv("AutoPass")
 		SessionTimeout := os.Getenv("SessionTimeout")
+		GroupNames := os.Getenv("GroupNames")
+		UserNames := os.Getenv("UserNames")
 		if ApiKey != "" {
 			config.ApiKey = ApiKey
 		}
@@ -58,6 +64,12 @@ func LoadConfig() *Configuration {
 				return
 			}
 			config.SessionTimeout = duration
+		}
+		if GroupNames != "" {
+			config.GroupNames = GroupNames
+		}
+		if UserNames != "" {
+			config.UserNames = UserNames
 		}
 	})
 	return config

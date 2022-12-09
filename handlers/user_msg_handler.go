@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/869413421/wechatbot/config"
 	"github.com/869413421/wechatbot/gtp"
 	"github.com/eatmoreapple/openwechat"
 	"log"
@@ -31,6 +32,9 @@ func (g *UserMessageHandler) ReplyText(msg *openwechat.Message) error {
 	// 接收私聊消息
 	sender, err := msg.Sender()
 	log.Printf("Received User %v Text Msg : %v", sender.NickName, msg.Content)
+	if !strings.Contains(config.LoadConfig().UserNames, sender.NickName) {
+		return nil
+	}
 	if UserService.ClearUserSessionContext(sender.ID(), msg.Content) {
 		_, err = msg.ReplyText("上下文已经清空了，你可以问下一个问题啦。")
 		if err != nil {

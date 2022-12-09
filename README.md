@@ -8,8 +8,8 @@
 
 ### 目前实现了以下功能
  * 提问增加上下文，更接近官网效果
- * 机器人群聊@回复
- * 机器人私聊回复
+ * 机器人群聊@回复(特定群)
+ * 机器人私聊回复(特定人员)
  * 好友添加自动通过
 
 # 使用前提
@@ -29,7 +29,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name wechatbot -e ApiKey=xxxx -e AutoPass=false -e SessionTimeout=60 docker.mirrors.sjtug.sjtu.edu.cn/qingshui869413421/wechatbot:latest
+$ docker run -itd --name wechatbot -e ApiKey=xxxx -e AutoPass=false -e SessionTimeout=60s docker.mirrors.sjtug.sjtu.edu.cn/qingshui869413421/wechatbot:latest
 
 # 查看二维码
 $ docker logs -f wechatbot
@@ -41,10 +41,13 @@ $ docker logs -f wechatbot
 
 ```sh
 # 复制配置文件，根据自己实际情况，调整配置里的内容
-cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
+cp config.dev.json config.dev.json  # 其中 config.dev.json 从项目的根目录获取
+
+# 运行我修改的镜像
+docker run -itd --name wechatbot -v ~/config.dev.json:/app/config.dev.json rogergao/wechatbot:0.1
 
 # 运行项目
-docker run -itd --name wechatbot -v ./config.json:/app/config.json docker.mirrors.sjtug.sjtu.edu.cn/qingshui869413421/wechatbot:latest
+docker run -itd --name wechatbot -v ./config.dev.json:/app/config.dev.json docker.mirrors.sjtug.sjtu.edu.cn/qingshui869413421/wechatbot:latest
 
 # 查看二维码
 $ docker logs -f wechatbot

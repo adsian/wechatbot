@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/869413421/wechatbot/config"
 	"github.com/869413421/wechatbot/gtp"
 	"github.com/eatmoreapple/openwechat"
 	"log"
@@ -32,6 +33,11 @@ func (g *GroupMessageHandler) ReplyText(msg *openwechat.Message) error {
 	sender, err := msg.Sender()
 	group := openwechat.Group{User: sender}
 	log.Printf("Received Group %v Text Msg : %v", group.NickName, msg.Content)
+
+	// 不是特定的群
+	if !strings.Contains(config.LoadConfig().GroupNames, group.NickName) {
+		return nil
+	}
 
 	// 不是@的不处理
 	if !msg.IsAt() {
